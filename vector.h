@@ -8,33 +8,33 @@ typedef struct vector
   unsigned char initialized;
   size_t size;
   size_t len;
-  void* ptr;
+  void *ptr;
   //
-  unsigned char (*set)(struct vector* self, void* ptr, size_t len);
-  unsigned char (*init)(void* self);
-  unsigned char (*free)(void* self);
-  unsigned char (*equals)(void* elem, void* cmp);
-  unsigned char (*bigger)(void* elem, void* cmp);
-  unsigned char (*smaller)(void* elem, void* cmp);
-  unsigned char (*clone)(void* dest, void* src);
-  unsigned char (*push)(struct vector* self, void* value);
-  unsigned char (*pop)(struct vector* self, size_t index);
-  unsigned char (*subvector)(struct vector* self, struct vector* receive, size_t index1, size_t index2);
-  unsigned char (*add)(struct vector* self, void* added, size_t added_len);
-  unsigned char (*prependElement)(struct vector* self, void* value);
-  unsigned char (*prepend)(struct vector* self, void* added, size_t len);
-  unsigned char (*insertElement)(struct vector* self, void* value, size_t index);
-  unsigned char (*insert)(struct vector* self, void* value, size_t value_len, size_t index);
-  unsigned char (*replace)(struct vector* self, void* pattern, size_t pattern_len, void* substitute, size_t substitute_len);
-  unsigned char (*replaceAll)(struct vector* self, void* pattern, size_t pattern_len, void* substitute, size_t substitute_len);
-  unsigned char (*indexOf)(struct vector* self, void* pattern, size_t pattern_len, size_t* index);
-  unsigned char (*replaceNth)(struct vector* self, void* pattern, size_t pattern_len, void* substitute, size_t substitute_len, size_t n);
-  unsigned char (*sort)(struct vector* self, unsigned char ascending);
-  unsigned char (*contains)(struct vector* self, void* pattern, size_t pattern_len, unsigned char* res, size_t* where, size_t from);
-  unsigned char (*bricks)(struct vector* self, void* pattern, size_t pattern_len, void*** result, size_t* xLen, size_t** yLens, size_t sizePtr);
+  unsigned char (*set)(struct vector *self, void *ptr, size_t len);
+  unsigned char (*init)(void *self);
+  unsigned char (*free)(void *self);
+  unsigned char (*equals)(void *elem, void *cmp);
+  unsigned char (*bigger)(void *elem, void *cmp);
+  unsigned char (*smaller)(void *elem, void *cmp);
+  unsigned char (*clone)(void *dest, void *src);
+  unsigned char (*push)(struct vector *self, void *value);
+  unsigned char (*pop)(struct vector *self, size_t index);
+  unsigned char (*subvector)(struct vector *self, struct vector *receive, size_t index1, size_t index2);
+  unsigned char (*add)(struct vector *self, void *added, size_t added_len);
+  unsigned char (*prependElement)(struct vector *self, void *value);
+  unsigned char (*prepend)(struct vector *self, void *added, size_t len);
+  unsigned char (*insertElement)(struct vector *self, void *value, size_t index);
+  unsigned char (*insert)(struct vector *self, void *value, size_t value_len, size_t index);
+  unsigned char (*replace)(struct vector *self, void *pattern, size_t pattern_len, void *substitute, size_t substitute_len);
+  unsigned char (*replaceAll)(struct vector *self, void *pattern, size_t pattern_len, void *substitute, size_t substitute_len);
+  unsigned char (*indexOf)(struct vector *self, void *pattern, size_t pattern_len, size_t *index);
+  unsigned char (*replaceNth)(struct vector *self, void *pattern, size_t pattern_len, void *substitute, size_t substitute_len, size_t n);
+  unsigned char (*sort)(struct vector *self, unsigned char ascending);
+  unsigned char (*contains)(struct vector *self, void *pattern, size_t pattern_len, unsigned char *res, size_t *where, size_t from);
+  unsigned char (*bricks)(struct vector *self, void *pattern, size_t pattern_len, void ***result, size_t *xLen, size_t **yLens, size_t sizePtr);
 } vector;
 // verified
-unsigned char vector_clone(vector* dest, vector* src)
+unsigned char vector_clone(vector *dest, vector *src)
 {
   if (dest == NULL || src == NULL)
   {
@@ -64,7 +64,7 @@ unsigned char vector_clone(vector* dest, vector* src)
   return 0;
 }
 // verified
-unsigned char vector_free(vector* ptr)
+unsigned char vector_free(vector *ptr)
 {
   if (ptr == NULL)
   {
@@ -85,16 +85,16 @@ unsigned char vector_free(vector* ptr)
   ptr = NULL;
   return 0;
 }
-void vector_assignFunctions(vector* self);
+void vector_assignFunctions(vector *self);
 // verified
-vector* vector_new(size_t size, unsigned char (*init)(void* self),
-  unsigned char (*clone)(void* dest, void* src),
-  unsigned char (*free)(void* ptr),
-  unsigned char (*equals)(void* elem, void* cmp),
-  unsigned char (*bigger)(void* elem, void* cmp),
-  unsigned char (*smaller)(void* elem, void* cmp))
+vector *vector_new(size_t size, unsigned char (*init)(void *self),
+                   unsigned char (*clone)(void *dest, void *src),
+                   unsigned char (*free)(void *ptr),
+                   unsigned char (*equals)(void *elem, void *cmp),
+                   unsigned char (*bigger)(void *elem, void *cmp),
+                   unsigned char (*smaller)(void *elem, void *cmp))
 {
-  vector* res = (vector*)malloc(sizeof(vector));
+  vector *res = (vector *)malloc(sizeof(vector));
   if (res == NULL)
   {
     return NULL;
@@ -117,7 +117,7 @@ vector* vector_new(size_t size, unsigned char (*init)(void* self),
   return res;
 }
 // verified
-unsigned char vector_set(vector* self, void* ptr, size_t len)
+unsigned char vector_set(vector *self, void *ptr, size_t len)
 {
   if (!self || !ptr)
   {
@@ -127,7 +127,7 @@ unsigned char vector_set(vector* self, void* ptr, size_t len)
   {
     return 2;
   }
-  void* aux;
+  void *aux;
   aux = realloc(self->ptr, self->size * len);
   if (!aux)
   {
@@ -150,13 +150,13 @@ unsigned char vector_set(vector* self, void* ptr, size_t len)
   return 0;
 }
 // verified
-unsigned char vector_push(vector* self, void* value)
+unsigned char vector_push(vector *self, void *value)
 {
   if (self == NULL || value == NULL)
   {
     return 1;
   }
-  void* new_ptr;
+  void *new_ptr;
   if (self->initialized)
   {
     new_ptr = realloc(self->ptr, self->size * (self->len + 1));
@@ -214,7 +214,7 @@ unsigned char vector_push(vector* self, void* value)
   return 0;
 }
 // verified
-unsigned char vector_pop(vector* self, size_t index)
+unsigned char vector_pop(vector *self, size_t index)
 {
   if (self == NULL)
   {
@@ -231,7 +231,7 @@ unsigned char vector_pop(vector* self, size_t index)
       return 3;
     }
   }
-  void* new_ptr;
+  void *new_ptr;
   if (self->len == 1 && index == 0)
   {
     self->len = 0;
@@ -241,8 +241,8 @@ unsigned char vector_pop(vector* self, size_t index)
   if (self->len - 1 != index)
   {
     memmove(self->ptr + index * self->size,
-      self->ptr + (index + 1) * self->size,
-      (self->len - index - 1) * self->size);
+            self->ptr + (index + 1) * self->size,
+            (self->len - index - 1) * self->size);
     new_ptr = realloc(self->ptr, (self->len - 1) * self->size);
     if (new_ptr == NULL)
     {
@@ -269,16 +269,16 @@ unsigned char vector_pop(vector* self, size_t index)
   return 0;
 }
 // verified
-unsigned char vector_subvector(vector* self, vector* receive, size_t index1,
-  size_t index2)
+unsigned char vector_subvector(vector *self, vector *receive, size_t index1,
+                               size_t index2)
 {
   if (self == NULL || receive == NULL)
   {
     return 1;
   }
-  vector* aux =
-    vector_new(receive->size, receive->init, receive->clone, receive->free,
-      receive->equals, receive->bigger, receive->smaller);
+  vector *aux =
+      vector_new(receive->size, receive->init, receive->clone, receive->free,
+                 receive->equals, receive->bigger, receive->smaller);
   if (aux == NULL)
   {
     return 2;
@@ -314,7 +314,7 @@ unsigned char vector_subvector(vector* self, vector* receive, size_t index1,
   return 0;
 }
 // verified
-unsigned char vector_add(vector* self, void* added, size_t added_len)
+unsigned char vector_add(vector *self, void *added, size_t added_len)
 {
   if (self == NULL || added == NULL)
   {
@@ -331,13 +331,13 @@ unsigned char vector_add(vector* self, void* added, size_t added_len)
   return 0;
 }
 // verified
-unsigned char vector_prependElement(vector* self, void* value)
+unsigned char vector_prependElement(vector *self, void *value)
 {
   if (self == NULL || value == NULL)
   {
     return 1;
   }
-  void* new_ptr;
+  void *new_ptr;
   if (self->initialized)
   {
     new_ptr = realloc(self->ptr, (self->len + 1) * self->size);
@@ -397,13 +397,13 @@ unsigned char vector_prependElement(vector* self, void* value)
   }
 }
 // verified
-unsigned char vector_prepend(vector* self, void* added, size_t len)
+unsigned char vector_prepend(vector *self, void *added, size_t len)
 {
   if (self == NULL || added == NULL)
   {
     return 1;
   }
-  void* new_ptr;
+  void *new_ptr;
   size_t i;
   if (self->initialized)
   {
@@ -484,7 +484,7 @@ unsigned char vector_prepend(vector* self, void* added, size_t len)
   }
 }
 // verified
-unsigned char vector_insertElement(vector* self, void* value, size_t index)
+unsigned char vector_insertElement(vector *self, void *value, size_t index)
 {
   if (self == NULL || value == NULL)
   {
@@ -494,7 +494,7 @@ unsigned char vector_insertElement(vector* self, void* value, size_t index)
   {
     return 2;
   }
-  void* ptr;
+  void *ptr;
   if (self->initialized)
   {
     ptr = realloc(self->ptr, (self->len + 1) * self->size);
@@ -504,8 +504,8 @@ unsigned char vector_insertElement(vector* self, void* value, size_t index)
     }
     self->ptr = ptr;
     memmove(self->ptr + (index + 1) * self->size,
-      self->ptr + index * self->size,
-      self->size * (self->len - index - 1));
+            self->ptr + index * self->size,
+            self->size * (self->len - index - 1));
     if (self->clone != NULL)
     {
       self->clone(self->ptr + index * self->size, value);
@@ -546,7 +546,7 @@ unsigned char vector_insertElement(vector* self, void* value, size_t index)
   return 0;
 }
 // verified
-unsigned char vector_insert(vector* self, void* value, size_t value_len, size_t index)
+unsigned char vector_insert(vector *self, void *value, size_t value_len, size_t index)
 {
   if (self == NULL || value == NULL)
   {
@@ -556,8 +556,8 @@ unsigned char vector_insert(vector* self, void* value, size_t value_len, size_t 
   {
     return 2;
   }
-  vector* backup = vector_new(self->size, self->init, self->clone, self->free,
-    self->equals, self->bigger, self->smaller);
+  vector *backup = vector_new(self->size, self->init, self->clone, self->free,
+                              self->equals, self->bigger, self->smaller);
   if (!backup)
   {
     return 3;
@@ -601,8 +601,8 @@ unsigned char vector_insert(vector* self, void* value, size_t value_len, size_t 
   return 0;
 }
 // verified
-unsigned char vector_replace(vector* self, void* pattern, size_t pattern_len,
-  void* substitute, size_t substitute_len)
+unsigned char vector_replace(vector *self, void *pattern, size_t pattern_len,
+                             void *substitute, size_t substitute_len)
 {
   if (!self || !pattern || !substitute)
   {
@@ -629,7 +629,7 @@ unsigned char vector_replace(vector* self, void* pattern, size_t pattern_len,
     for (j = 0; j < pattern_len && isPresent && i + j < self->len; j++)
     {
       isPresent &= self->equals(pattern + j * self->size,
-        self->ptr + (i + j) * self->size);
+                                self->ptr + (i + j) * self->size);
     }
     if (isPresent)
     {
@@ -657,8 +657,8 @@ unsigned char vector_replace(vector* self, void* pattern, size_t pattern_len,
   return 0;
 }
 // verified
-unsigned char vector_replaceAll(vector* self, void* pattern, size_t pattern_len,
-  void* substitute, size_t substitute_len)
+unsigned char vector_replaceAll(vector *self, void *pattern, size_t pattern_len,
+                                void *substitute, size_t substitute_len)
 {
   if (!self || !pattern || !substitute)
   {
@@ -676,8 +676,8 @@ unsigned char vector_replaceAll(vector* self, void* pattern, size_t pattern_len,
   {
     return 0;
   }
-  vector* places =
-    vector_new(sizeof(size_t), NULL, NULL, NULL, NULL, NULL, NULL);
+  vector *places =
+      vector_new(sizeof(size_t), NULL, NULL, NULL, NULL, NULL, NULL);
   if (!places)
   {
     return 4;
@@ -692,7 +692,7 @@ unsigned char vector_replaceAll(vector* self, void* pattern, size_t pattern_len,
       for (j = 0; j < pattern_len && isPresent && i + j < self->len; j++)
       {
         isPresent &= self->equals(pattern + j * self->size,
-          self->ptr + (i + j) * self->size);
+                                  self->ptr + (i + j) * self->size);
       }
       if (isPresent && j == pattern_len)
       {
@@ -711,14 +711,14 @@ unsigned char vector_replaceAll(vector* self, void* pattern, size_t pattern_len,
     for (j = 0; j < pattern_len && okPattern; j++)
     {
       okPattern =
-        !self->pop(self, ((size_t*)places->ptr)[places->len - i - 1]);
+          !self->pop(self, ((size_t *)places->ptr)[places->len - i - 1]);
     }
     if (!okPattern)
     {
       return 6;
     }
     okPlaces = !self->insert(self, substitute, substitute_len,
-      ((size_t*)places->ptr)[places->len - i - 1]);
+                             ((size_t *)places->ptr)[places->len - i - 1]);
   }
   if (!okPlaces)
   {
@@ -731,8 +731,8 @@ unsigned char vector_replaceAll(vector* self, void* pattern, size_t pattern_len,
   return 0;
 }
 // verified
-unsigned char vector_indexOf(vector* self, void* pattern, size_t pattern_len,
-  size_t* index)
+unsigned char vector_indexOf(vector *self, void *pattern, size_t pattern_len,
+                             size_t *index)
 {
   if (!self || !pattern)
   {
@@ -758,7 +758,7 @@ unsigned char vector_indexOf(vector* self, void* pattern, size_t pattern_len,
     for (j = 0; j < pattern_len && present; j++)
     {
       present &= self->equals(self->ptr + (i + j) * self->size,
-        pattern + j * self->size);
+                              pattern + j * self->size);
     }
     if (present && j == pattern_len)
     {
@@ -769,9 +769,9 @@ unsigned char vector_indexOf(vector* self, void* pattern, size_t pattern_len,
   return 0;
 }
 // verified
-unsigned char vector_replaceNth(vector* self, void* pattern, size_t pattern_len,
-  void* substitute, size_t substitute_len,
-  size_t n)
+unsigned char vector_replaceNth(vector *self, void *pattern, size_t pattern_len,
+                                void *substitute, size_t substitute_len,
+                                size_t n)
 {
   if (!self || !pattern || !substitute)
   {
@@ -799,7 +799,7 @@ beg:
     for (j = 0; j < pattern_len && isPresent && i + j < self->len; j++)
     {
       isPresent &= self->equals(pattern + j * self->size,
-        self->ptr + (i + j) * self->size);
+                                self->ptr + (i + j) * self->size);
     }
     if (isPresent && j == pattern_len)
     {
@@ -837,8 +837,8 @@ beg:
   }
   return 0;
 }
-unsigned char merge(vector* arr, size_t left, size_t mid, size_t right,
-  unsigned char ascending)
+unsigned char merge(vector *arr, size_t left, size_t mid, size_t right,
+                    unsigned char ascending)
 {
   size_t i, j, k;
   size_t n1 = mid - left + 1;
@@ -866,8 +866,8 @@ unsigned char merge(vector* arr, size_t left, size_t mid, size_t right,
   while (i < n1 && j < n2)
   {
     if (ascending ? arr->smaller(&L[i * arr->size], &R[j * arr->size]) ||
-      arr->equals(&L[i * arr->size], &R[j * arr->size])
-      : arr->bigger(&L[i * arr->size], &R[j * arr->size]))
+                        arr->equals(&L[i * arr->size], &R[j * arr->size])
+                  : arr->bigger(&L[i * arr->size], &R[j * arr->size]))
     {
       if (arr->clone(arr->ptr + k * arr->size, L + i * arr->size))
       {
@@ -904,8 +904,8 @@ unsigned char merge(vector* arr, size_t left, size_t mid, size_t right,
     k++;
   }
 }
-unsigned char mergeSort(vector* arr, size_t left, size_t right,
-  unsigned char ascending)
+unsigned char mergeSort(vector *arr, size_t left, size_t right,
+                        unsigned char ascending)
 {
   if (left < right)
   {
@@ -919,7 +919,7 @@ unsigned char mergeSort(vector* arr, size_t left, size_t right,
   }
   return 1;
 }
-unsigned char vector_sort(vector* self, unsigned char ascending)
+unsigned char vector_sort(vector *self, unsigned char ascending)
 {
   if (!self)
   {
@@ -944,7 +944,7 @@ unsigned char vector_sort(vector* self, unsigned char ascending)
   return !mergeSort(self, 0, self->len - 1, ascending);
 }
 // verified
-unsigned char vector_contains(vector* self, void* pattern, size_t pattern_len, size_t* isPresent, size_t* where, size_t from)
+unsigned char vector_contains(vector *self, void *pattern, size_t pattern_len, size_t *isPresent, size_t *where, size_t from)
 {
   if (!self)
   {
@@ -961,13 +961,13 @@ unsigned char vector_contains(vector* self, void* pattern, size_t pattern_len, s
     for (j = 0; j < pattern_len && *isPresent && i + j < self->len; j++)
     {
       (*isPresent) &= self->equals(pattern + j * self->size,
-        self->ptr + (i + j) * self->size);
+                                   self->ptr + (i + j) * self->size);
     }
   }
   return 0;
 }
 // verified
-unsigned char vector_bricks(vector* self, void* pattern, size_t pattern_len, void*** result, size_t* xLen, size_t** yLens, size_t sizePtr)
+unsigned char vector_bricks(vector *self, void *pattern, size_t pattern_len, void ***result, size_t *xLen, size_t **yLens, size_t sizePtr)
 {
   if (!self)
   {
@@ -979,57 +979,76 @@ unsigned char vector_bricks(vector* self, void* pattern, size_t pattern_len, voi
   }
   unsigned char buffer[pattern_len / self->size];
   size_t i;
-  for (i = 0;i < sizeof(buffer);i++) {
+  for (i = 0; i < sizeof(buffer); i++)
+  {
     buffer[i] = 1;
   }
-  vector* aux = vector_new(sizeof(unsigned char), NULL, NULL, NULL, NULL, NULL, NULL);
-  size_t j;unsigned char zero = 0;
-  for (i = 0;i < self->len;i++) {
-    aux->push(aux, &aux);
+  vector *aux = vector_new(sizeof(unsigned char), NULL, NULL, NULL, NULL, NULL, NULL);
+  if (!aux)
+  {
+    return 3;
+  }
+  size_t j;
+  unsigned char zero = 0, error;
+  for (i = 0; i < self->len; i++)
+  {
+    error = aux->push(aux, &aux);
+    if (error)
+    {
+      return 4;
+    }
   }
   if (self->equals)
   {
-    unsigned char error, res = 1;
+    unsigned char res = 1;
     size_t where, from = 0;
-    for (i = 0;i < self->len;i++, from += where + sizeof(buffer)) {
+    for (i = 0; i < self->len; i++, from += where + sizeof(buffer))
+    {
       error = self->contains(self, pattern, pattern_len, &res, &where, from);
-      if (error) {
-        return 3;
+      if (error)
+      {
+        return 5;
       }
       error = res ? aux->insert(aux, buffer, sizeof(buffer), &where) : 0;
     }
-    vector* tree = vector_new(sizeof(vector), vector_assignFunctions, vector_clone, vector_free, NULL, NULL, NULL);
-    if (!tree) {
-      return 4;
+    vector *tree = vector_new(sizeof(vector), vector_assignFunctions, vector_clone, vector_free, NULL, NULL, NULL);
+    if (!tree)
+    {
+      return 6;
     }
-    else {
-      vector* type = vector_new(self->size, self->init, self->clone, self->free, self->equals, self->bigger, self->smaller);
-      if (!type) {
-        return 5;
+    else
+    {
+      vector *type = vector_new(self->size, self->init, self->clone, self->free, self->equals, self->bigger, self->smaller);
+      if (!type)
+      {
+        return 7;
       }
       unsigned char sub[] = {};
-      for (i = 0;i < aux->len;i += res ? i + 1 : i, error = (res) ? aux->replace(aux, buffer, sizeof(buffer), sub, sizeof(sub)) : 0) {
+      for (i = 0; i < aux->len; i += res ? i + 1 : i, error = (res) ? aux->replace(aux, buffer, sizeof(buffer), sub, sizeof(sub)) : 0)
+      {
         error = aux->contains(aux, buffer, sizeof(buffer), &res, &where);
-        if (error) {
-          return 6;
+        if (error)
+        {
+          return 8;
         }
       }
-      for (j = 0;j < i;j++) {
+      for (j = 0; j < i; j++)
+      {
         error = tree->push(tree, type);
-        if (error) {
-          return 7;
+        if (error)
+        {
+          return 9;
         }
       }
     }
   }
   else
   {
-    return 8;
+    return 10;
   }
   return 0;
-
 }
-void vector_assignFunctions(vector* self)
+void vector_assignFunctions(vector *self)
 {
   self->push = vector_push;
   self->pop = vector_pop;
