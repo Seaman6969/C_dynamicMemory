@@ -85,7 +85,7 @@ unsigned char vector_free(vector *ptr)
   ptr = NULL;
   return 0;
 }
-void vector_assignFunctions(vector *self);
+unsigned char vector_assignFunctions(vector *self);
 // verified
 vector *vector_new(size_t size, unsigned char (*init)(void *self),
                    unsigned char (*clone)(void *dest, void *src),
@@ -113,7 +113,10 @@ vector *vector_new(size_t size, unsigned char (*init)(void *self),
   res->equals = equals;
   res->bigger = bigger;
   res->smaller = smaller;
-  vector_assignFunctions(res);
+  if (vector_assignFunctions(res))
+  {
+    return NULL;
+  }
   return res;
 }
 // verified
@@ -944,7 +947,7 @@ unsigned char vector_sort(vector *self, unsigned char ascending)
   return !mergeSort(self, 0, self->len - 1, ascending);
 }
 // verified
-unsigned char vector_contains(vector *self, void *pattern, size_t pattern_len, size_t *isPresent, size_t *where, size_t from)
+unsigned char vector_contains(vector *self, void *pattern, size_t pattern_len, unsigned char *isPresent, size_t *where, size_t from)
 {
   if (!self)
   {
@@ -960,8 +963,7 @@ unsigned char vector_contains(vector *self, void *pattern, size_t pattern_len, s
     *isPresent = 1;
     for (j = 0; j < pattern_len && *isPresent && i + j < self->len; j++)
     {
-      (*isPresent) &= self->equals(pattern + j * self->size,
-                                   self->ptr + (i + j) * self->size);
+      (*isPresent) &= self->equals(pattern + j * self->size, self->ptr + (i + j) * self->size);
     }
   }
   return 0;
@@ -1009,9 +1011,9 @@ unsigned char vector_bricks(vector *self, void *pattern, size_t pattern_len, voi
       {
         return 5;
       }
-      error = res ? aux->insert(aux, buffer, sizeof(buffer), &where) : 0;
+      error = res ? aux->insert(aux, buffer, sizeof(buffer), where) : 0;
     }
-    vector *tree = vector_new(sizeof(vector), vector_assignFunctions, vector_clone, vector_free, NULL, NULL, NULL);
+    vector *tree = vector_new(sizeof(vector), (unsigned char (*)(void *))vector_assignFunctions, (unsigned char (*)(void *, void *))vector_clone, (unsigned char (*)(void *))vector_free, NULL, NULL, NULL);
     if (!tree)
     {
       return 6;
@@ -1024,9 +1026,9 @@ unsigned char vector_bricks(vector *self, void *pattern, size_t pattern_len, voi
         return 7;
       }
       unsigned char sub[] = {};
-      for (i = 0; i < aux->len; i += res ? i + 1 : i, error = (res) ? aux->replace(aux, buffer, sizeof(buffer), sub, sizeof(sub)) : 0)
+      for (i = 0; i < aux->len; i += res ? 1 : 0, error = (res) ? aux->replace(aux, buffer, sizeof(buffer), sub, sizeof(sub)) : 0)
       {
-        error = aux->contains(aux, buffer, sizeof(buffer), &res, &where);
+        error = aux->contains(aux, buffer, sizeof(buffer), &res, &where, 0);
         if (error)
         {
           return 8;
@@ -1048,7 +1050,7 @@ unsigned char vector_bricks(vector *self, void *pattern, size_t pattern_len, voi
   }
   return 0;
 }
-void vector_assignFunctions(vector *self)
+unsigned char vector_assignFunctions(vector *self)
 {
   self->push = vector_push;
   self->pop = vector_pop;
@@ -1065,5 +1067,6 @@ void vector_assignFunctions(vector *self)
   self->contains = vector_contains;
   self->bricks = vector_bricks;
   self->set = vector_set;
+  return 0;
 }
 #endif
