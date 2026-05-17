@@ -986,7 +986,8 @@ unsigned char vector_bricks(vector *self, void *pattern, size_t pattern_len, voi
     buffer[i] = 1;
   }
   vector *aux = vector_new(sizeof(unsigned char), NULL, NULL, NULL, NULL, NULL, NULL);
-  if (!aux)
+  vector *spots = vector_new(sizeof(size_t), NULL, NULL, NULL, NULL, NULL, NULL);
+  if (!aux || !spots)
   {
     return 3;
   }
@@ -1033,20 +1034,44 @@ unsigned char vector_bricks(vector *self, void *pattern, size_t pattern_len, voi
         {
           return 8;
         }
+        error = spots->push(spots, &where);
+        if (error)
+        {
+          return 9;
+        }
       }
       for (j = 0; j < i; j++)
       {
         error = tree->push(tree, type);
         if (error)
         {
-          return 9;
+          return 10;
         }
+      }
+      *xLen = tree->len;
+      *yLens = (size_t *)malloc(sizeof(size_t) * (*xLen));
+      if (!*yLens)
+      {
+        return 11;
+      }
+      for (i = 0, j = 0; i < self->len; i++, j = (i == ((size_t *)spots->ptr)[j]) ? j + 1 : j)
+      {
+        i = (i == ((size_t *)spots->ptr)[j]) ? i + sizeof(buffer) / sizeof(unsigned char) : i;
+        error = ((vector *)tree->ptr)[j].push(&((vector *)tree->ptr)[j], self->ptr + i * self->size);
+        if (error)
+        {
+          return 12;
+        }
+      }
+      for (i = 0; i < *xLen; i++)
+      {
+        (*yLens)[i] = ((vector *)tree->ptr)[i].len;
       }
     }
   }
   else
   {
-    return 10;
+    return 13;
   }
   return 0;
 }
